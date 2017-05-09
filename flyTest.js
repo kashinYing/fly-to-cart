@@ -8,9 +8,10 @@ var options = {
     endWidth: '10px',
     endHeight: '10px',
     leftVelocity: 'linear',
-    topVelocity: 'cubic-bezier(0.5, -0.5, 1, 1)',
+    //topVelocity: 'cubic-bezier(0.5, -0.5, 1, 1)',
+    topVelocity: 'cubic-bezier(0, 1, 1, 1)',
     flyDuration: '0.9s',
-    sourceImg: 'heart.png'
+    sourceImg: 'red_star.svg'
 }
 
 
