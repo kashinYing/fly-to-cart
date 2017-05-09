@@ -48,6 +48,7 @@
             endCssStr += 'height: ' + options.endHeight + '; ';
             endCssStr += 'transition: ' + transitionStr + '; ';
             endCssStr += '-webkit-transition: ' + transitionStr + '; ';
+            endCssStr += '-moz-transition: ' + transitionStr + '; ';
 
          
             // initialize the item to fly
@@ -69,7 +70,7 @@
             // start to fly
             setTimeout(function() {
                 __flyItem.style.cssText = endCssStr;
-            }, 0);
+            }, 10);
         }
     }
 })();
