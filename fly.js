@@ -1,59 +1,76 @@
-var width = window.innerWidth;
-var height = window.innerHeight;
+(function() {
+    window.__flyToCart = function(options) {
+        /**
+         * {
+         *   startLeft
+         *   startTop
+         *   startWidth
+         *   startHeight
+         *   endLeft
+         *   endTop
+         *   endWidth
+         *   endHeight
+         *   leftVelocity
+         *   topVelocity
+         *   flyDuration
+         *   sourceImg
+         * }
+         */
 
-var item = document.getElementById('item');
-var cart = document.getElementById('cart');
+        if (!options
+            || !options.startLeft
+            || !options.startTop
+            || !options.startWidth 
+            || !options.startHeight
+            || !options.endLeft
+            || !options.endTop
+            || !options.flyDuration
+            || !options.sourceImg) {
+            alert('Please set the options');
+        } else {
+            
+            //generate start css
+            var startCssStr = 'position: absolute; ';
+            startCssStr += 'top: ' + options.startTop + '; ';
+            startCssStr += 'left: ' + options.startLeft + '; '; 
+            startCssStr += 'width: ' + options.startWidth + '; '; 
+            startCssStr += 'height: ' + options.startHeight + '; ';
 
-var startX = width / 2 + 'px';
-var startY = height / 2 + 'px';
-var startH = '50px';
-var startW = '50px';
+            //generate end css
+            var leftTransition = 'left ' + options.flyDuration + (options.leftVelocity ? ' ' + options.leftVelocity : '');
+            var topTransition = 'top ' + options.flyDuration + (options.topVelocity ? ' ' + options.topVelocity : '');
+            var sizeTransition = 'width ' + options.flyDuration + ' linear, height ' + options.flyDuration + ' linear';
+            var transitionStr = leftTransition + ', ' + topTransition + ', ' + sizeTransition;
+            var endCssStr = 'position: absolute; ';
+            endCssStr += 'top: ' + options.endTop + '; ';
+            endCssStr += 'left: ' + options.endLeft + '; '; 
+            endCssStr += 'width: ' + options.endWidth + '; '; 
+            endCssStr += 'height: ' + options.endHeight + '; ';
+            endCssStr += 'transition: ' + transitionStr + '; ';
+            endCssStr += '-webkit-transition: ' + transitionStr + '; ';
 
-var endX = width - 150 + 'px';
-var endY = '150px';
-var endH = '0px';
-var endW = '0px';
+         
+            // initialize the item to fly
+            var __flyItem = document.createElement('img');
+            __flyItem.setAttribute('src', options.sourceImg);
+            __flyItem.style.cssText = startCssStr;
+            
+            //destroy
+            __flyItem.addEventListener('transitionend', function() {
+                try {
+                    document.body.removeChild(__flyItem);
+                } catch (e) {
+                    console.log('flyItem already deleted');
+                }
+            });
 
-var duration = '0.75s';
+            document.body.appendChild(__flyItem);
 
-item.style.position = 'absolute';
-item.style.top = startY;
-item.style.left = startX;
-
-cart.style.position = 'absolute';
-cart.style.top = endY;
-cart.style.left = endX;
-
-var addToCart = function() {
-    var toAdd = document.createElement('img');
-    toAdd.setAttribute('src', 'heart.png');
-    toAdd.style.position = 'absolute';
-    toAdd.style.top = startY;
-    toAdd.style.left = startX;
-    toAdd.style.width = startW;
-    toAdd.style.height = startH;
-    document.body.appendChild(toAdd);
-    setTimeout(fly, 0);
-}
-
-var fly = function() {
-    var toAdd = document.getElementsByTagName('img')[0];
-    toAdd.style.top = endY;
-    toAdd.style.left = endX;
-    toAdd.style.width = endW;
-    toAdd.style.height = endH;
-    var xTransition = 'left ' + duration + ' linear';
-    var yTransition = 'top  ' + duration + ' cubic-bezier(0, 1, 1, 1)'
-    var sizeTransition = 'width ' + duration + ' linear, height ' + duration + ' linear'
-    var transitionStr = xTransition + ', ' + yTransition + ', ' + sizeTransition;
-    toAdd.style.setProperty('transition', transitionStr);
-    toAdd.style.setProperty('-webkit-transition', transitionStr);
-    toAdd.addEventListener('transitionend', function() {
-        try {
-            document.body.removeChild(toAdd);
-        } catch (e) {
-            console.log('toAdd already deleted');
+            // start to fly
+            setTimeout(function() {
+                __flyItem.style.cssText = endCssStr;
+            }, 0);
         }
-    });
-}
+    }
+})();
 
